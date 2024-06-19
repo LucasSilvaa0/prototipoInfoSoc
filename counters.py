@@ -39,11 +39,11 @@ class Points_Counter:
         fonte = pg.font.Font(None, 30)
         color_font = (255,255,255)
         
-        pitu_counter = fonte.render(f'Pitus: ' + str(self.pitu), True, color_font)
+        pitu_counter = fonte.render(f'Lixo: ' + str(self.pitu), True, color_font)
         
-        bottle_counter = fonte.render(f'Garrafas: ' + str(self.bottle), True, color_font)
+        bottle_counter = fonte.render(f'Lipídeos: ' + str(self.bottle), True, color_font)
         
-        tire_counter = fonte.render(f'Pneus: ' + str(self.tire), True, color_font)
+        tire_counter = fonte.render(f'Proteínas: ' + str(self.tire), True, color_font)
     
         screen.blit(image_background, (5,10))
         screen.blit(pitu_counter, (25,25))

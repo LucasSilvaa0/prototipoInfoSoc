@@ -22,29 +22,6 @@ my_font = pg.font.SysFont('arial', 36)
 
 counter = Points_Counter()
 init = False
-while not running:
-
-        screen.fill([255,255,255])
-        
-        screen.blit(background_start, (0,0))
-        start.draw_button()
-        close.draw_button()
-        
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                running = False
-                exit()
-        
-        pg.display.update()
-
-        if start.update():
-            running = True
-            music_start.play(0)
-        elif close.update():
-            pg.quit()
-            exit()
-
 music_game.play(1.5)
 START_TIME = time()
 stopwatch = Stopwatch(START_TIME)

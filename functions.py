@@ -51,7 +51,7 @@ def init_game():
 
     onscreen = []
     dificuldade = 1
-    running = False
+    running = True
     angle = 0
     crab_animation = 0
     return x_screen, y_screen, screen, clock, frame_count, onscreen, dificuldade, running, angle, crab_animation
