@@ -8,8 +8,6 @@ class Positions(ABC):
     def __init__(self, pos_x, pos_y):
         self.pos_x = pos_x
         self.pos_y = pos_y
-    
-    
 
 class Lixo(Positions):
 
@@ -17,9 +15,7 @@ class Lixo(Positions):
         super().__init__(pos_x, pos_y)
         self.id = id
         self.frame_count = frame_count
-        self.angle = randint(0,360)
-        const = 4 + int(self.frame_count/180)
-        self.speed_obj = int(randint(int(const/2),int(3*const/4))+const/5)
+        self.angle = 0
     
     @property
     def x(self):
@@ -32,32 +28,29 @@ class Lixo(Positions):
     @property
     def sprite_id(self):
         return self.id
-
-    @property
-    def speed(self):
-        return self.speed_obj
     
     @property
     def obj_angle(self):
         return self.angle
     
-    def update(self, screen, img):
-        self.angle += 1
-        self.pos_y += self.speed
-        self.draw(screen, img)
-    
-    def draw(self, screen, img):
-        screen.blit(img, (self.x, self.y))
+    def draw(self, screen, img, pos_x_screen):
+        screen.blit(img, (self.x-pos_x_screen, self.y))
 
 
 class Player(Positions):
 
-    def __init__(self, pos_x, pos_y, speed_obj, width):
+    def __init__(self, pos_x, pos_y, speed_obj, width, height):
         super().__init__(pos_x, pos_y)
         self.speed_obj = speed_obj
         self.width = width
-        self.lives = 3
+        self.height = height
         self.default_tuple = (pos_x, pos_y, speed_obj, width, 3)
+        self.space = False
+        self.capturando = False
+        self.descendo = True
+        self.y_base = pos_y
+        self.saindo = False
+        self.contador = 0
 
     @property
     def x(self):
@@ -74,34 +67,95 @@ class Player(Positions):
     @property
     def player_width(self):
         return self.width
-    
-    @property
-    def _lives(self):
-        return self.lives
 
-    def move(self, direcao):
-        if direcao[pg.K_d] and self.x < pg.display.get_window_size()[0] - self.player_width:
-            self.pos_x += self.speed
-            if self.pos_x > pg.display.get_window_size()[0] - self.player_width:
-                self.pos_x = pg.display.get_window_size()[0] - self.player_width
-        if direcao[pg.K_a] and self.x > 0:
-            self.pos_x -= self.speed
-            if self.pos_x < 0:
-                self.pos_x = 0
+    def capturar(self, height):
+        if self.capturando:
+            self.pos_y += self.speed
+            if self.pos_y >= 0.8*height:
+                self.pos_y = 0.8*height
+                self.capturando = False
+        else:
+            self.pos_y -= self.speed
+            if self.pos_y <= self.y_base:
+                self.pos_y = self.y_base
+                self.space = False
+    
+    def entregar(self, y_screen):
+        if self.capturando:
+            self.pos_y += self.speed
+            if self.pos_y >= 0.8*y_screen - self.height:
+                self.pos_y = 0.8*y_screen - self.height
+                self.capturando = False
+            else:
+                if self.contador == 100:
+                    pg.mixer.init()
+                    pg.mixer.music.load("audio/Assar_carne.mp3")
+                    pg.mixer.music.play()
+                    
+                self.contador += 1
+                
+    
+    def mexer(self):
+        if self.descendo:
+            self.pos_y += self.speed//5
+            if self.pos_y >= self.y_base+15:
+                self.descendo = False
+        else:
+            self.pos_y -= self.speed//5
+            if self.pos_y <= self.y_base-15:
+                self.descendo = True
+        
+    
+    def move(self, direcao, height, width, pos_x_screen, y_screen):
+        if not self.saindo:
+            if not self.space:
+                if direcao[pg.K_d] and self.x < pg.display.get_window_size()[0] - self.player_width:
+                    self.pos_x += self.speed
+                    if self.pos_x > pg.display.get_window_size()[0] - self.player_width:
+                        self.pos_x = pg.display.get_window_size()[0] - self.player_width
+                if direcao[pg.K_a] and self.x > 0:
+                    self.pos_x -= self.speed
+                    if self.pos_x < 0:
+                        self.pos_x = 0
+                if direcao[pg.K_SPACE] and self.x > 0:
+                    self.space = True
+                    self.capturando = True
+                if direcao[pg.K_i]:
+                    self.saindo = True
+                self.mexer()
+            else:
+                self.capturar(height)
+                
+            return False, self.saindo, pos_x_screen
+        else:
+            if self.pos_x < int(width*1.5) - pos_x_screen - self.width//2 or pos_x_screen < width:
+                self.pos_x += self.speed//2
+                if self.pos_x > int(width*1.5) - pos_x_screen - self.width//2:
+                    self.pos_x = int(width*1.5) - pos_x_screen - self.width//2
+                pos_x_screen += self.speed//2
+                if pos_x_screen > width:
+                    pos_x_screen = width
+                self.mexer()
+            else:
+                if not self.capturando:
+                    self.contador += 1
+                if self.contador == 100:
+                    self.space = True
+                    self.capturando = True
+                if self.contador == 700:
+                    return True, self.saindo, pos_x_screen
+                elif self.contador >= 100:
+                    self.entregar(y_screen)
+            
+            return False, self.saindo, pos_x_screen
+                
     
     def animate(self, animation_i, screen, frame_count):
-
-        self.speed_obj = 3+(int(frame_count/180))
-
         if frame_count % 20 == 0:
-            animation_i = (animation_i+1)% len(sprite_sheet[5])
+            animation_i = (animation_i+1)% len(sprite_sheet[4])
             
-        screen.blit(sprite_sheet[5][animation_i], (self.x, self.y))
+        screen.blit(sprite_sheet[4][animation_i], (self.x, self.y))
         return animation_i
-    
-    def lose_life(self):
-        self.lives -= 1
-        return self._lives
         
     def game_over(self):
         return False
