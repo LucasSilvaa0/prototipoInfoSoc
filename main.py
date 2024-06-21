@@ -2,15 +2,15 @@ import pygame as pg
 from functions import game_diff, remove_obj, init_game, init_sprites, dark_screen, finish, draw_finish
 from objects import Player
 from sprite_sheet import sprites_player
-from time import time, sleep
-from counters import Stopwatch, Points_Counter
+from time import sleep
+from counters import Points_Counter
 
 pg.display.init()
 pg.font.init()
 
 pos_x_screen, x_screen, y_screen, screen, clock, frame_count, onscreen, dificuldade, running, angle, animation_i = init_game()
 
-background_game, counter_box, clock_box, start, close, crab, background_finished, play_again = init_sprites(screen, sprites_player)
+background_game, counter_box, crab, background_finished, play_again = init_sprites(screen, sprites_player)
 
 while True:
     reiniciar = False
@@ -24,8 +24,6 @@ while True:
     my_font = pg.font.SysFont('arial', 36)
 
     counter = Points_Counter()
-    START_TIME = time()
-    stopwatch = Stopwatch(START_TIME)
     esc = False
         
     while running:
@@ -46,7 +44,7 @@ while True:
                 animation_i = drone_player.animate(animation_i, screen)
                 esc, acabando, pos_x_screen = drone_player.move(keys, y_screen, x_screen, pos_x_screen, y_screen, counter)
                 if esc:
-                    esc, time_record, points = finish(stopwatch, time(), counter)
+                    esc, points = finish(counter)
 
                 removidos = []
                 colididos = []
@@ -73,9 +71,6 @@ while True:
                     reiniciar = True
                     
                     sleep(1)
-                    
-                    START_TIME = time()
-                    stopwatch = Stopwatch(START_TIME)
 
                     esc = False
 

@@ -1,7 +1,7 @@
 import pygame as pg
 
 sprites_pitu = pg.image.load('graphics/lixo_resized.webp')
-sprites_bottle = pg.image.load('graphics/gordura.png')
+sprites_bottle = pg.image.load('graphics/lipidio_resized.webp')
 sprites_tire = pg.image.load('graphics/proteina.jpg')
 
 sprites_mangues = [pg.image.load('graphics/swamp.png')]

@@ -1,10 +1,9 @@
 import pygame as pg
 from random import randint
 from objects import Lixo
-from button import Button_Start, Button_Exit, Button_Play_Again
+from button import Button_Play_Again
 from sprite_sheet import sprite_sheet
 from math import log2
-from music1 import Music
 
 def spawn_lixo(frame_count):
 
@@ -63,16 +62,13 @@ def init_sprites(screen, sprites_player):
   background_finished = pg.image.load('graphics/carne.webp')
 
   counter_box = pg.image.load('graphics/counter_background.png')
-  clock_box = pg.image.load('graphics/clock_background.png')
 
-  start = Button_Start('graphics/Button_play.png', screen)
-  close = Button_Exit('graphics/Button_Exit.png', screen)
   play_again = Button_Play_Again('graphics/Button_play_again.png', screen)
 
   crab = sprites_player
   pg.display.set_icon(crab[-1])
 
-  return background_game, counter_box, clock_box, start, close, crab, background_finished, play_again
+  return background_game, counter_box, crab, background_finished, play_again
 
 
 def dark_screen(surface, wid, height, alpha=150):
@@ -81,11 +77,10 @@ def dark_screen(surface, wid, height, alpha=150):
     surface.blit(overlay, (0, 0))
     
 
-def finish(stopwatch, time, counter):
-    time_record = time - stopwatch._start_time
+def finish(counter):
     points = counter.pitu + counter.bottle + counter.tire
     
-    return [True, time_record, points]
+    return [True, points]
   
 
 def draw_finish(screen, background_finished, x_screen, y_screen, points):
