@@ -106,7 +106,7 @@ class Player(Positions):
                 self.descendo = True
         
     
-    def move(self, direcao, height, width, pos_x_screen, y_screen):
+    def move(self, direcao, height, width, pos_x_screen, y_screen, counter):
         if not self.saindo:
             if not self.space:
                 if direcao[pg.K_d] and self.x < pg.display.get_window_size()[0] - self.player_width:
@@ -120,7 +120,7 @@ class Player(Positions):
                 if direcao[pg.K_SPACE] and self.x > 0:
                     self.space = True
                     self.capturando = True
-                if direcao[pg.K_i]:
+                if direcao[pg.K_i] and (counter.lipidio > 0 or counter.proteina > 0):
                     self.saindo = True
                 self.mexer()
             else:
@@ -150,11 +150,13 @@ class Player(Positions):
             return False, self.saindo, pos_x_screen
                 
     
-    def animate(self, animation_i, screen, frame_count):
-        if frame_count % 20 == 0:
-            animation_i = (animation_i+1)% len(sprite_sheet[4])
-            
-        screen.blit(sprite_sheet[4][animation_i], (self.x, self.y))
+    def animate(self, animation_i, screen):
+        if not self.capturando and not self.space and not self.saindo:
+            screen.blit(sprite_sheet[4][0], (self.x, self.y))
+        elif self.capturando and self.space and not self.saindo:
+            screen.blit(sprite_sheet[4][1], (self.x, self.y))
+        else:
+            screen.blit(sprite_sheet[4][2], (self.x, self.y))
         return animation_i
         
     def game_over(self):

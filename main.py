@@ -17,7 +17,7 @@ while True:
     pos_x_screen = 0
 
     clock = pg.time.Clock()
-    crab_player = Player(x_screen/2-int(crab[0].get_width())//2, int(y_screen*0.2125), 7, int(crab[0].get_width()), int(crab[0].get_height()))
+    drone_player = Player(x_screen/2-int(crab[0].get_width())//2, int(y_screen*0.2125), 7, int(crab[0].get_width()), int(crab[0].get_height()))
 
     sprites_bioimpressora = pg.image.load('graphics/bioimpressora.JPG')
 
@@ -43,8 +43,8 @@ while True:
             
             if not esc:
                 frame_count, dificuldade, onscreen, speed_game = game_diff(frame_count, dificuldade, onscreen)
-                animation_i = crab_player.animate(animation_i, screen, frame_count)
-                esc, acabando, pos_x_screen = crab_player.move(keys, y_screen, x_screen, pos_x_screen, y_screen)
+                animation_i = drone_player.animate(animation_i, screen)
+                esc, acabando, pos_x_screen = drone_player.move(keys, y_screen, x_screen, pos_x_screen, y_screen, counter)
                 if esc:
                     esc, time_record, points = finish(stopwatch, time(), counter)
 
@@ -52,7 +52,7 @@ while True:
                 colididos = []
                 for item in onscreen:
                     removidos = remove_obj(removidos, item, screen, pos_x_screen)
-                    colididos = counter.collide(colididos, crab_player, crab, item)
+                    colididos = counter.collide(colididos, drone_player, crab, item)
                     item[1].draw(screen, pg.transform.rotate(item[0], item[1].obj_angle), pos_x_screen)
 
                 counter.draw_counter(screen, counter_box)
@@ -64,7 +64,7 @@ while True:
                     onscreen.remove(i)
             else:
                 screen.blit(background_game, (0,0))
-                animation_i = crab_player.animate(animation_i, screen, frame_count)
+                animation_i = drone_player.animate(animation_i, screen)
                 dark_screen(screen, x_screen, y_screen)
                 draw_finish(screen, background_finished, x_screen, y_screen, points)
                 play_again.draw_button()
@@ -79,7 +79,7 @@ while True:
 
                     esc = False
 
-                    crab_player.restart()
+                    drone_player.restart()
                     onscreen = []
                     
                     frame_count = -1

@@ -14,9 +14,9 @@ class Stopwatch:
 class Points_Counter:
     
     def __init__(self):
-        self._pitu = 0
-        self._bottle = 0
-        self._tire = 0
+        self.lixo = 0
+        self.lipidio = 0
+        self.proteina = 0
     
     def collide(self, colididos, crab_player, crab, item):
         item_rec = item[0].get_rect(topleft=(item[1].x, item[1].y))
@@ -24,11 +24,11 @@ class Points_Counter:
         
         if crab_rec.colliderect(item_rec):
             if item[1].sprite_id == 0:
-                self._pitu += 1
+                self.lixo += 1
             elif item[1].sprite_id == 1:
-                self._bottle += 1
+                self.lipidio += 1
             else:
-                self._tire += 1
+                self.proteina += 1
             
             colididos.append(item)
         
@@ -56,12 +56,12 @@ class Points_Counter:
     
     @property
     def pitu(self):
-        return self._pitu
+        return self.lixo
     
     @property
     def bottle(self):
-        return self._bottle
+        return self.lipidio
     
     @property
     def tire(self):
-        return self._tire
+        return self.proteina
