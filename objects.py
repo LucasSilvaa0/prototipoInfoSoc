@@ -83,8 +83,8 @@ class Player(Positions):
     def entregar(self, y_screen):
         if self.capturando:
             self.pos_y += self.speed
-            if self.pos_y >= 0.8*y_screen - self.height:
-                self.pos_y = 0.8*y_screen - self.height
+            if self.pos_y >= 0.65*y_screen - self.height + 10:
+                self.pos_y = 0.65*y_screen - self.height + 10
                 self.capturando = False
             else:
                 if self.contador == 100:

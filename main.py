@@ -12,6 +12,11 @@ pos_x_screen, x_screen, y_screen, screen, clock, frame_count, onscreen, dificuld
 
 background_game, counter_box, crab, background_finished, play_again = init_sprites(screen, sprites_player)
 
+sprites_bioimpressora = pg.image.load('graphics/impressora.png')
+
+font_carne = pg.font.Font(None, 57)
+color_font = (255,255,255)
+
 while True:
     reiniciar = False
     pos_x_screen = 0
@@ -19,7 +24,6 @@ while True:
     clock = pg.time.Clock()
     drone_player = Player(x_screen/2-int(crab[0].get_width())//2, int(y_screen*0.2125), 7, int(crab[0].get_width()), int(crab[0].get_height()))
 
-    sprites_bioimpressora = pg.image.load('graphics/bioimpressora.JPG')
 
     my_font = pg.font.SysFont('arial', 36)
 
@@ -54,7 +58,10 @@ while True:
                     item[1].draw(screen, pg.transform.rotate(item[0], item[1].obj_angle), pos_x_screen)
 
                 counter.draw_counter(screen, counter_box)
-                screen.blit(sprites_bioimpressora, (1.5*x_screen-pos_x_screen-sprites_bioimpressora.get_width()//2, y_screen*0.8))
+                screen.blit(sprites_bioimpressora, (1.5*x_screen-pos_x_screen-sprites_bioimpressora.get_width()//2, y_screen*0.65))
+                
+                text_carne_record = font_carne.render(f'BIOIMPRESSORA 3D!', True, color_font)
+                screen.blit(text_carne_record, (1.5*x_screen-pos_x_screen-text_carne_record.get_width()//2, y_screen*0.7 + sprites_bioimpressora.get_height()))
                 
                 for i in removidos:
                     onscreen.remove(i)
