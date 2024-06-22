@@ -57,8 +57,8 @@ def init_game():
 
 def init_sprites(screen, sprites_player):
 
-  background_game = pg.image.load('graphics/swamp.png')
-  background_game = pg.transform.scale(background_game, screen.get_size())
+  background_game = pg.image.load('graphics/OIG3.png')
+  background_game = pg.transform.scale(background_game, (screen.get_width()*2, screen.get_height()))
   background_finished = pg.image.load('graphics/carne.webp')
 
   counter_box = pg.image.load('graphics/counter_background.png')
@@ -75,15 +75,8 @@ def dark_screen(surface, wid, height, alpha=150):
     overlay = pg.Surface((wid, height), pg.SRCALPHA)
     overlay.fill((0, 0, 0, alpha))
     surface.blit(overlay, (0, 0))
-    
 
-def finish(counter):
-    points = counter.pitu + counter.bottle + counter.tire
-    
-    return [True, points]
-  
-
-def draw_finish(screen, background_finished, x_screen, y_screen, points):
+def draw_finish(screen, background_finished, x_screen, y_screen):
   pg.font.init()
   font_carne = pg.font.Font(None, 57)
   color_font = (255,255,255)

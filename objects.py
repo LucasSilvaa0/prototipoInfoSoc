@@ -142,7 +142,7 @@ class Player(Positions):
                 if self.contador == 100:
                     self.space = True
                     self.capturando = True
-                if self.contador == 700:
+                if self.contador == 650:
                     return True, self.saindo, pos_x_screen
                 elif self.contador >= 100:
                     self.entregar(y_screen)
